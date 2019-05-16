@@ -1,0 +1,341 @@
+---
+title: "Hw10"
+author: "syuan"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#1.R的入門指令
+
+### **註解 #**
+
+  + 在R檔中把不要交給R讀取的文字加註只需要在敘述或指令前加上*" # "*便可以把該行轉成註解（comment out)
+
+### **指派(assign)**
+
+  + 可以用"<-"或"="來做為指派的符號
+
+### **串接指令 c()**
+
+  + `c()`用來串連多個字串; c是 “Combine Values into a Vector or List” 意思
+  + 所謂的vetor字面上是「向量」的意思，在此是指同樣屬性的資料的集合（如都是數字或都是文字）
+
+```{r}
+x <- c(20:25) 
+x
+```
+
+```{r}
+x[4] 
+```
+
+******
+
+## **運算子**
+
+1. 算數運算子
+  
+ +   加 + ,減 - ,乘 * ,除 /
+ 
+```{r}
+3 + 5 * 6 - 7
+```
+  
+ +  商數 %/% ,餘數 %%
+ 
+```{r}
+60%/%4
+25%%5
+```
+
+2. 關係運算子
+  + <(小於) > (大於)  <=(小於等於)  >=(大於等於)  ==(等於) !=(不等於)
+
+```{r}
+a <- 10
+b <- 6
+a==a
+a!=b
+a < b
+```
+
+
+3. 邏輯運算子
+  + &&（和), ||（或）=> 只比較第一個元素
+  + &(和), |(或) => 比較所有元素
+
+```{r}
+x <- c( 0, 1, 0, 1)
+y <- c( 0, 0, 1, 1)
+x&&y
+x||y
+x&y
+x|y
+```
+
+4. 其他運算函式
+
+  `exp()` => 將輸入數值調整為以e為底的指數函數
+
+```{r}
+exp(0.2) 
+```
+
+`log()` => 將輸入數值調整為以e為底數的對數函數
+
+```{r}
+log(10000) 
+```
+
+`abs()` => 將輸入數值轉換為絕對值的函數
+
+```{r}
+abs(-256) #the absolute of -256
+```
+
+`sqrt()` => 將輸入數值開平方根的函數
+
+```{r}
+sqrt(4096) #square root
+```
+
+`round()` => 以四捨五入規則調整小數位，使用時可以多給一個參數`digits`小位數個數(預設是`digits=0`即調整為整數)
+
+```{r}
+round(sqrt(416))
+round(sqrt(416),digits=0)
+round(sqrt(29),digits=3)
+```
+
+`sort()` => 將輸入數值由小而大排序,但忽略NA值
+
+```{r}
+x=c(2.89,56.2,405,12.36,NA)
+sort(x) 
+```
+
+`order()` => 將輸入數值由小而大排序,並將NA值放置在最後
+
+```{r}
+x=c(2.89,56.2,405,12.36,NA)
+x[order(x)]
+```
+
+
+------
+
+#2.安裝、使用套件
+
+  使用`install.packages("")`,`library( )`來下載並且使用
+  
+```{r}
+#install.packages("ggplot2")  
+library(ggplot2)
+```
+
+------
+
+#3.資料物件的管理
+
+
+```
+ls()            列出物件
+objects()　　　 列出物件　
+rm(x)           清除物件x
+rm(list=ls())   清除所有在暫存區的物件 
+```
+
+------
+
+#4.檔案格式基本觀念
+```
+  + 矩陣 matrix
+  + 陣列 array
+  + 表單 list
+  + 資料框架 data frame
+```
+
+******
+
+**matrix 矩陣**
+
+  + `matrix()` => 建立矩陣
+  + `t()` => 找出該矩陣的轉置矩陣
+  
+```{r}
+A <- matrix(1:6, nrow = 2, ncol = 3)
+A
+t(A)
+```
+
+
+  + `byrow=  ` => 按行填入矩陣(R默認是按列輸入)
+  + `dimnames= ` => 加上行列標籤
+
+```{r}
+B <- matrix(c(20,4,6,15,3,8), nrow = 2, byrow = T, dimnames = list(Row = c("R1",  "R2"),  column= c("C1", "C2","C3")))
+B
+```
+
+
+  + `solve()` => 找出該矩陣的反矩陣
+
+```{r}
+c <- matrix(c(7,2,1,5), nrow = 2)
+c
+inverse.c <- round(solve(c),5)
+inverse.c
+```
+******
+
+**array　陣列**
+  
+  + `array()` => 建立陣列
+  
+```{r}
+a1 <- array(1:24, c(3, 4, 2))
+a1
+```
+******
+
+**list 表單**
+
+  + `list()` => 建立表單資料
+  + 以下三種存取list資料格式的做法很常用，也都適用於list與data frame等資料型態
+
+    + 用" [[ ]] "來存取特定變數或欄位
+    + 用" [ ] "來存取特定的變數值
+    + 用" $ "來取用list中的資料
+  
+```{r}
+LIST <- list(table.1=c(0,1,0,1,1), table.2= matrix(1:9, nrow=3),table.3=array(1:8,c(2,2,2)),table.4=data.frame(V1=seq(0,3,1)))
+LIST
+```
+  
+```{r}
+ LIST$table.4
+```
+ ******
+ 
+ **data.frame　資料框**
+ 
+  + `data.frame()` => 建立資料框
+  
+```{r}
+DF <- data.frame(V1 = seq(3, 7, 2), V2 = LETTERS[1:3])
+DF
+```
+ ******
+ 
+**辨識資料型態**
+
+  + `class()` => 辨認資料的型態
+
+```{r}
+DF <- data.frame(V1 = seq(3, 7, 2), V2 = LETTERS[1:3])
+class(DF)
+```
+
+  + 可透過"$" 針對特定欄位或變數進行資料型態辨認
+
+```{r}
+class(DF$V2)
+class(DF$V1)
+```
+******
+
+**轉換變數的型態**
+
+  + `as.character()` => 將字元轉換成數字
+  + `factor()` => 將數字轉換成字元
+  
+```{r}
+library(glmbb)
+#crabs <- read.table(file.choose(), header=TRUE)
+data(crabs)
+class(crabs$color)  
+crabs$color.num <- as.numeric(factor(crabs$color,levels(crabs$color)[c(3,4,1, 2)]))
+class(crabs$color.num)
+crabs$newcolor <- factor(crabs$color.num,levels=1:4,labels = c("Light","Medium","Dark","Darker"))
+class(crabs$newcolor)
+```
+
+#5.流程控制與迴圈
+
+**if 與 else 判斷式** - 可以判斷一個輸入的邏輯值，如果輸入的值為TRUE，則執行對應的程式碼，反之該值若為 FALSE，則不執行。程式碼大致如下所示:
+
+```  
+  if (<condition>) {
+         ##do something
+} else {
+         ##do something
+}
+```
+
+For example:
+```{r}
+#initialize a variable
+n <- 10
+
+#check if this variable * 5 is > 40
+if (n * 5 > 40){
+       print("This is easy!")
+} else {
+       print ("It's not easy!")
+}
+```
+******
+
+**for** - `for`迴圈用在程式執行前就已經知道迭代次數的情況，它在執行時會將輸入向量中的每個元素值逐一指定給迭代變數，然後重複執行迴圈的內容。程式碼大致如下所示:。
+
+```
+for (<search condition>){
+          #do something
+}
+```
+
+For example:
+```{r}
+#initialize a vector
+y <- c( 92, 44, 31, 0, 86, 26, 17, 6)
+
+#print the first 6 numbers of this vector
+for(i in 1:6){
+     print (y[i])
+}
+```
+******
+
+**repeat** - `repeat` 迴圈是最簡單的迴圈控制結構，它會讓 R 不斷得執行指定的程式碼，直到遇到`break` 中斷迴圈的執行為止
+
+For example:
+```{r}
+x <- 0
+repeat {
+  message("x = ", x)
+  x <- x + 1
+  if (x == 5) break
+}
+```
+******
+
+**while** - `while` 迴圈類似 `repeat`，不過它會先檢查指定的條件，在條件為 TRUE 的情況下才會執行迴圈的內容
+
+For example:
+```{r}
+#initialize a condition
+Age <- 12
+
+#check if age is less than 17
+while(Age < 17){
+         print(Age)
+         Age <- Age + 1 #Once the loop is executed, this code breaks the loop
+}
+```
+
